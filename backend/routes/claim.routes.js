@@ -4,8 +4,17 @@ const Coupon = require("../models/coupon.model");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 
+// Middleware to extract client IP
+
 router.get("/", authMiddleware.authUser, async (req, res, next) => {
-  const userIp = req.ip;
+  const userIp =
+    req.headers["cf-connecting-ip"] ||
+    req.headers["x-real-ip"] ||
+    req.headers["x-forwarded-for"] ||
+    req.socket.remoteAddress ||
+    "";
+  console.log(userIp);
+
   const recentClaim = await Coupon.findOne({
     claimedBy: userIp,
     claimedAt: { $gt: new Date(Date.now() - 3600000) },
