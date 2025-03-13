@@ -44,7 +44,7 @@ router.get("/", authMiddleware.authUser, async (req, res, next) => {
     httpOnly: true,
     maxAge: 3600000,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
+    sameSite: "None",
   });
 
   res.status(201).json({
