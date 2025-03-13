@@ -1,6 +1,7 @@
 "use client";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 export default function Home() {
   const [message, setMessage] = useState("");
@@ -19,12 +20,14 @@ export default function Home() {
 
       if (res.status == 201) {
         setMessage(res.data.message + " " + res.data.coupon);
+        toast.success(`Claimed!!  ${res.data.coupon}`);
       }
       console.log("res", res);
     } catch (error) {
       setMessage(error.response.data.message);
       setMinutes(error.response.data.min || 0);
       setSeconds(error.response.data.sec || 0);
+      toast.error("Try after sometime");
       setIsCountingDown(true); // Start the countdown
     }
   };
@@ -57,20 +60,22 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-gray-50 rounded-lg shadow-md">
+    <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-black rounded-lg shadow-md">
       <button
         onClick={handleClaim}
-        className={`px-8 py-3 text-lg font-medium rounded-full transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 bg-gray-300 text-gray-600 cursor-pointer`}
+        className={`px-8 py-3 text-lg font-medium rounded-full transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 bg-gray-300 cursor-pointer`}
       >
         Claim Now!
       </button>
 
-      <p className="mt-4 text-center text-gray-600">{message}</p>
+      <p className="mt-4 text-center text-white">{message}</p>
 
       {isCountingDown && (
         <div className="mt-6">
-          <div className="text-3xl font-bold text-center">{formatTime()}</div>
-          <p className="mt-1 text-sm text-gray-500 text-center">
+          <div className="text-3xl font-bold text-center text-white">
+            {formatTime()}
+          </div>
+          <p className="mt-1 text-sm text-white text-center">
             {seconds === 0 && minutes === 0 ? "Time's up!" : "Time remaining"}
           </p>
         </div>
